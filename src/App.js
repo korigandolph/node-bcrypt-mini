@@ -12,11 +12,27 @@ class App extends Component {
     };
   }
 
-  async login() {}
+  //set up async and await to replace .then and .catch
 
-  async signup() {}
+  async login() {
+    const {email, password} = this.state;
+    let res = await axios.post('/auth/login', {email, password});
+    this.setState({loggedInUser: res.data, email: '', password: ''})
+  }
 
-  logout() {}
+//uses .then and .catch instead of async/await--better for catching errors
+
+  signup() {
+    const {email, password} =this.state;
+    axios.post('/auth/signup', {email, password}).then(res=>{
+      this.setState({loggedInUser: res.data, email: '', password: ''}).catch(err=>console.log(err));
+    })
+  }
+
+  logout() {
+    axios.get('/auth/logout');
+    this.setState({loggedInUser: {}});
+  }
 
   render() {
     let { loggedInUser, email, password } = this.state;
